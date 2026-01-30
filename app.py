@@ -1,9 +1,41 @@
+ 
 import streamlit as st
 from llama_cloud import LlamaCloud
 import openai
 
 # Page config
 st.set_page_config(page_title="AA Literature Chat", page_icon="📖")
+
+# Password protection
+def check_password():
+    """Returns `True` if the user had the correct password."""
+    def password_entered():
+        """Checks whether a password entered by the user is correct."""
+        if st.session_state["password"] == st.secrets["APP_PASSWORD"]:
+            st.session_state["password_correct"] = True
+            del st.session_state["password"]  # don't store password
+        else:
+            st.session_state["password_correct"] = False
+
+    if "password_correct" not in st.session_state:
+        # First run, show input for password
+        st.text_input(
+            "Password", type="password", on_change=password_entered, key="password"
+        )
+        return False
+    elif not st.session_state["password_correct"]:
+        # Password incorrect, show input + error
+        st.text_input(
+            "Password", type="password", on_change=password_entered, key="password"
+        )
+        st.error("😕 Password incorrect")
+        return False
+    else:
+        # Password correct
+        return True
+
+if not check_password():
+    st.stop()
 
 # API keys from Streamlit secrets
 LLAMACLOUD_API_KEY = st.secrets["LLAMACLOUD_API_KEY"]
@@ -19,9 +51,18 @@ openai_client = openai.OpenAI(
     api_key=OPENROUTER_API_KEY,
 )
 
-# Title
+# Title and welcome message
 st.title("📖 AA Literature Chatbot")
-st.caption("Ask questions about the Big Book and 12&12")
+st.markdown("""
+**Welcome to an early alpha of an AA Chatbot. This chatbot is currently v0.2.1.**
+
+This chatbot is meant as an aid to living the program of Alcoholics Anonymous and meant as an aid to sponsorship, meetings and reading literature, **NOT MEANT TO REPLACE**.
+
+**Current RAG Sources:**
+- Alcoholics Anonymous (Big Book) - 4th Edition
+- Twelve Steps and Twelve Traditions
+""")
+st.divider()
 
 # Initialize chat history
 if "messages" not in st.session_state:
