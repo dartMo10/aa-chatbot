@@ -90,13 +90,49 @@ if prompt := st.chat_input("Ask about AA literature..."):
         # Extract text from results
         context = "\n\n".join([node.node.text for node in results.retrieval_nodes])
     
-    # Generate response with Claude
-    with st.chat_message("assistant"):
-        with st.spinner("Thinking..."):
-            response = openai_client.chat.completions.create(
-                model="anthropic/claude-3.5-sonnet",
-                messages=[
-                    {"role": "system", "content": f"You are a helpful assistant knowledgeable about AA literature. Use the following context from the Big Book and Twelve Steps and Twelve Traditions to answer questions accurately. If the answer isn't in the context, say so.\n\nContext:\n{context}"},
+  # Generate response with Claude
+with st.chat_message("assistant"):
+    with st.spinner("Thinking..."):
+        # Prepare sources with metadata
+        sources_text = ""
+        for i, node in enumerate(results.retrieval_nodes, 1):
+            sources_text += f"\n\n---SOURCE {i}---\n"
+            sources_text += f"Text: {node.node.text}\n"
+            if hasattr(node.node, 'metadata'):
+                sources_text += f"Metadata: {node.node.metadata}\n"
+        
+        response = openai_client.chat.completions.create(
+            model="anthropic/claude-3.5-sonnet",
+            messages=[
+                {"role": "system", "content": f"""You are a helpful assistant for Alcoholics Anonymous literature. Follow these rules strictly:
+
+1. ONLY use information from the provided context below - never use your general knowledge about AA
+2. NEVER speculate or make assumptions
+3. If the context doesn't contain the answer, say "I don't find that information in the literature provided"
+4. If a question is unclear, ask clarifying questions before answering
+5. Always cite which book and source number the information comes from (e.g., "According to the Big Book [Source 1]...")
+6. When quoting directly, use quotation marks and reference the source number
+
+Context from AA Literature:
+{sources_text}"""},
+                {"role": "user", "content": prompt}
+            ],
+        )
+        
+        answer = response.choices[0].message.content
+        st.markdown(answer)
+        
+        # Show expandable sources
+        with st.expander("📚 View Source Material"):
+            for i, node in enumerate(results.retrieval_nodes, 1):
+                st.markdown(f"**Source {i}:**")
+                st.markdown(f"> {node.node.text}")
+                if hasattr(node.node, 'metadata') and node.node.metadata:
+                    st.caption(f"Metadata: {node.node.metadata}")
+                st.divider()
+        
+        # Add assistant response to chat history
+        st.session_state.messages.append({"role": "assistant", "content": answer})
                     {"role": "user", "content": prompt}
                 ],
             )
