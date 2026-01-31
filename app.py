@@ -108,9 +108,9 @@ if prompt := st.chat_input("Chat about the program of Alcoholics Anonymous ...")
                     sources_text += f"Metadata: {node.node.metadata}\n"
             
             response = openai_client.chat.completions.create(
-                model="anthropic/claude-3.5-sonnet",
+                model="cohere/command-r-plus",
                 messages=[
-                    {"role": "system", "content": f"""You are a helpful assistant for Alcoholics Anonymous literature. Follow these rules strictly:
+                    {"role": "system", "content": f"""You are a consultant on the Alcoholics Anonymous program. You are to aid the user while following these rules strictly:
 
 1. ONLY use information from the provided context below - never use your general knowledge about AA
 2. NEVER speculate or make assumptions
