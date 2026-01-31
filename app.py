@@ -53,9 +53,9 @@ openai_client = openai.OpenAI(
 # Title and welcome message
 st.title("📖 AA Chatbot")
 st.markdown("""
-** Welcome to an Alpha of This AA Chatbot **
+** Welcome to an alpha AA Chatbot **
 
-This chatbot is intended as an aid to living Alcoholics Anonymous' program.
+This chatbot is intended as an aid to living the Alcoholics Anonymous program.
 
 It is NOT MEANT TO REPLACE sponsorship, meetings, friends or AA literature. Instead, it serves as a supplementary tool for learning the AA program.
 
