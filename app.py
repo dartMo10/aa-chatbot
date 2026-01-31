@@ -1,4 +1,3 @@
- 
 import streamlit as st
 from llama_cloud import LlamaCloud
 import openai
@@ -54,11 +53,11 @@ openai_client = openai.OpenAI(
 # Title and welcome message
 st.title("📖 AA Literature Chatbot")
 st.markdown("""
-**Welcome to an early alpha of an AA Chatbot. This chatbot is currently v0.2.1.**
+**Welcome to an Alpha of an AA Chatbot. This chatbot is currently v0.2.1.**
 
 This chatbot is meant as an aid to living the program of Alcoholics Anonymous and meant as an aid to sponsorship, meetings and reading literature, **NOT MEANT TO REPLACE**.
 
-**Current RAG Sources:**
+**Available Literature:**
 - Alcoholics Anonymous (Big Book) - 4th Edition
 - Twelve Steps and Twelve Traditions
 """)
@@ -86,11 +85,8 @@ if prompt := st.chat_input("Ask about AA literature..."):
             pipeline_id=PIPELINE_ID,
             query=prompt,
         )
-        
-        # Extract text from results
-        context = "\n\n".join([node.node.text for node in results.retrieval_nodes])
     
-# Generate response with Claude
+    # Generate response with Claude
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
             # Prepare sources with metadata
@@ -130,26 +126,6 @@ Context from AA Literature:
                     if hasattr(node.node, 'metadata') and node.node.metadata:
                         st.caption(f"Metadata: {node.node.metadata}")
                     st.divider()
-            
-            # Add assistant response to chat history
-            st.session_state.messages.append({"role": "assistant", "content": answer})        
-        # Show expandable sources
-        with st.expander("📚 View Source Material"):
-            for i, node in enumerate(results.retrieval_nodes, 1):
-                st.markdown(f"**Source {i}:**")
-                st.markdown(f"> {node.node.text}")
-                if hasattr(node.node, 'metadata') and node.node.metadata:
-                    st.caption(f"Metadata: {node.node.metadata}")
-                st.divider()
-        
-        # Add assistant response to chat history
-        st.session_state.messages.append({"role": "assistant", "content": answer})
-                    {"role": "user", "content": prompt}
-                ],
-            )
-            
-            answer = response.choices[0].message.content
-            st.markdown(answer)
             
             # Add assistant response to chat history
             st.session_state.messages.append({"role": "assistant", "content": answer})
