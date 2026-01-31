@@ -90,21 +90,21 @@ if prompt := st.chat_input("Ask about AA literature..."):
         # Extract text from results
         context = "\n\n".join([node.node.text for node in results.retrieval_nodes])
     
-  # Generate response with Claude
-with st.chat_message("assistant"):
-    with st.spinner("Thinking..."):
-        # Prepare sources with metadata
-        sources_text = ""
-        for i, node in enumerate(results.retrieval_nodes, 1):
-            sources_text += f"\n\n---SOURCE {i}---\n"
-            sources_text += f"Text: {node.node.text}\n"
-            if hasattr(node.node, 'metadata'):
-                sources_text += f"Metadata: {node.node.metadata}\n"
-        
-        response = openai_client.chat.completions.create(
-            model="anthropic/claude-3.5-sonnet",
-            messages=[
-                {"role": "system", "content": f"""You are a helpful assistant for Alcoholics Anonymous literature. Follow these rules strictly:
+# Generate response with Claude
+    with st.chat_message("assistant"):
+        with st.spinner("Thinking..."):
+            # Prepare sources with metadata
+            sources_text = ""
+            for i, node in enumerate(results.retrieval_nodes, 1):
+                sources_text += f"\n\n---SOURCE {i}---\n"
+                sources_text += f"Text: {node.node.text}\n"
+                if hasattr(node.node, 'metadata'):
+                    sources_text += f"Metadata: {node.node.metadata}\n"
+            
+            response = openai_client.chat.completions.create(
+                model="anthropic/claude-3.5-sonnet",
+                messages=[
+                    {"role": "system", "content": f"""You are a helpful assistant for Alcoholics Anonymous literature. Follow these rules strictly:
 
 1. ONLY use information from the provided context below - never use your general knowledge about AA
 2. NEVER speculate or make assumptions
@@ -115,13 +115,24 @@ with st.chat_message("assistant"):
 
 Context from AA Literature:
 {sources_text}"""},
-                {"role": "user", "content": prompt}
-            ],
-        )
-        
-        answer = response.choices[0].message.content
-        st.markdown(answer)
-        
+                    {"role": "user", "content": prompt}
+                ],
+            )
+            
+            answer = response.choices[0].message.content
+            st.markdown(answer)
+            
+            # Show expandable sources
+            with st.expander("📚 View Source Material"):
+                for i, node in enumerate(results.retrieval_nodes, 1):
+                    st.markdown(f"**Source {i}:**")
+                    st.markdown(f"> {node.node.text}")
+                    if hasattr(node.node, 'metadata') and node.node.metadata:
+                        st.caption(f"Metadata: {node.node.metadata}")
+                    st.divider()
+            
+            # Add assistant response to chat history
+            st.session_state.messages.append({"role": "assistant", "content": answer})        
         # Show expandable sources
         with st.expander("📚 View Source Material"):
             for i, node in enumerate(results.retrieval_nodes, 1):
