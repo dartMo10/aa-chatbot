@@ -53,11 +53,14 @@ openai_client = openai.OpenAI(
 # Title and welcome message
 st.title("📖 AA Literature Chatbot")
 st.markdown("""
-**Welcome to an Alpha of an AA Chatbot. This chatbot is currently v0.2.1.**
+** Welcome to an Alpha of An AA Chatbot, v0.2.1 **
 
-This chatbot is meant as an aid to living the program of Alcoholics Anonymous and meant as an aid to sponsorship, meetings and reading literature, **NOT MEANT TO REPLACE**.
+This chatbot is intended as an aid to living Alcoholics Anonymous' program. It is NOT MEANT TO REPLACE sponsorship, meetings, friends or AA literature. Is is intended as a supplement.
+Being an alpha (in early development), a lot of things will fail. Also, the LLM model could flat out lie (hallucinate). This is normal part of software development. If these sorts of errors bug you, call your sponsor.
+Constructive feedback via email: [dartmore10@yahoo.com]
+(mailto:dartmore10@yahoo.com)
 
-**Available Literature:**
+** Current Sources :**
 - Alcoholics Anonymous (Big Book) - 4th Edition
 - Twelve Steps and Twelve Traditions
 """)
