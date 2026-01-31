@@ -108,7 +108,7 @@ if prompt := st.chat_input("Chat about the program of Alcoholics Anonymous ...")
                     sources_text += f"Metadata: {node.node.metadata}\n"
             
             response = openai_client.chat.completions.create(
-                model="mistralai/mistral-8x-instruct",
+                model="mistralai/mixtral-8x7b-instruct",
                 messages=[
                     {"role": "system", "content": f"""You are a consultant on the Alcoholics Anonymous program. You are to aid the user while following these rules strictly:
 
