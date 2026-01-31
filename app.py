@@ -3,7 +3,7 @@ from llama_cloud import LlamaCloud
 import openai
 
 # Page config
-st.set_page_config(page_title="AA Literature Chat", page_icon="📖")
+st.set_page_config(page_title="AA Chatbot", page_icon="📖")
 
 # Password protection
 def check_password():
@@ -51,7 +51,7 @@ openai_client = openai.OpenAI(
 )
 
 # Title and welcome message
-st.title("📖 AA Literature Chatbot")
+st.title("📖 AA Chatbot")
 st.markdown("""
 ** Welcome to an Alpha of An AA Chatbot, v0.2.1 **
 
@@ -83,7 +83,7 @@ for message in st.session_state.messages:
         st.markdown(message["content"])
 
 # Chat input
-if prompt := st.chat_input("Ask about AA literature..."):
+if prompt := st.chat_input("Chat about the program of Alcoholics Anonymous ..."):
     # Add user message
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
