@@ -108,7 +108,7 @@ if prompt := st.chat_input("Chat about the program of Alcoholics Anonymous ...")
                     sources_text += f"Metadata: {node.node.metadata}\n"
             
             response = openai_client.chat.completions.create(
-                model="cohere/command-r7b-12-2024",
+                model="cohere/command-r-plus-08-2024",
                 messages=[
                     {"role": "system", "content": f"""You are a consultant on the Alcoholics Anonymous program. You are to aid the user while following these rules strictly:
 
