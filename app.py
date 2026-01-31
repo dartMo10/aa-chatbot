@@ -53,7 +53,7 @@ openai_client = openai.OpenAI(
 # Title and welcome message
 st.title("📖 AA Chatbot")
 st.markdown("""
-** Welcome to an Alpha of An AA Chatbot, v0.2.1 **
+** Welcome to an Alpha of An AA Chatbot, Code v0.2.1,claude haiku 4.5 **
 
 This chatbot is intended as an aid to living Alcoholics Anonymous' program.
 
@@ -108,7 +108,7 @@ if prompt := st.chat_input("Chat about the program of Alcoholics Anonymous ...")
                     sources_text += f"Metadata: {node.node.metadata}\n"
             
             response = openai_client.chat.completions.create(
-                model="mistralai/mixtral-8x7b-instruct",
+                model="anthropic/claude-haiku-4.5",
                 messages=[
                     {"role": "system", "content": f"""You are a consultant on the Alcoholics Anonymous program. You are to aid the user while following these rules strictly:
 
