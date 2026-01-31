@@ -53,7 +53,7 @@ openai_client = openai.OpenAI(
 # Title and welcome message
 st.title("📖 AA Literature Chatbot")
 st.markdown("""
-**Welcome to an Alpha of An AA Chatbot, v0.2.1**
+** Welcome to an Alpha of An AA Chatbot, v0.2.1 **
 
 This chatbot is intended as an aid to living Alcoholics Anonymous' program.
 
